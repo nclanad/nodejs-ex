@@ -54,16 +54,16 @@ io.sockets.on('connection', function (socket, pseudo) {
             memoire.shift();
         }
         message = ent.encode(message);
+        if (message.indexOf('<')==-1 && message.indexOf('>')==-1){
         socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message, couleur : socket.couleur});
+        }
     });
     
     //Déconnexion d'un membre
     socket.on('disconnect', function(){
         if(nbr>0 && socket.pseudo){
             --nbr;
-        };
-        indice = liste.indexOf(socket.pseudo);
-        liste.splice(indice,1); //à partir de cet indice on supprime 1 element
+        }
         socket.broadcast.emit('MAJ_liste', liste); //tout le monde met à jour
         socket.broadcast.emit('MAJ_nbr',nbr);
         socket.broadcast.emit('disconnected', {pseudo :socket.pseudo, couleur : socket.couleur});
