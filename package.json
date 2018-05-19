@@ -250,11 +250,7 @@
       "resolved": "https://registry.npmjs.org/engine.io-parser/-/engine.io-parser-2.1.2.tgz",
       "version": "2.1.2"
     },
-    "ent": {
-      "integrity": "sha1-6WQhkyWiHQX0RGai9obtbOX13R0=",
-      "resolved": "https://registry.npmjs.org/ent/-/ent-2.2.0.tgz",
-      "version": "2.2.0"
-    },
+    "ent": "^2.2.0",
     "escape-html": {
       "integrity": "sha1-Aljq5NPQwJdN4cFpGI7wBR0dGYg=",
       "resolved": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz",
