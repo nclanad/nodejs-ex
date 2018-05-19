@@ -7,7 +7,7 @@ body{
        
 @font-face {
     font-family: '8bit';
-    src: url('public/bit.ttf') format('truetype');
+    src: url('bit.ttf') format('truetype');
 }
      
 #arcade{
