@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+         <link rel="stylesheet" href="style.css" />
+        <title>Space War et chat</title>
+        <link rel="icon" type="image/png" href="favicon.png" />
+        
+    </head>
+ 
+    <body>
+        <!--  PARTIE JEU-->
+        <div id="arcade">
+           
+            <div id="jeu">
+                <div id="anim">
+                    <img id="fond1" class="fond" src="fond.jpg" style="display:'inline">
+                    <img id="fond2" class="fond" src="fond.jpg" style="display:'inline">
+                    <img id="joueur" src="vaisseau.png">
+                    <img id="o1" class="obstacle" src="obstacle.png">
+                    <img id="o2" class="obstacle" src="obstacle.png">
+                    <img id="o3" class="obstacle" src="obstacle.png">
+                    <img id="spacewar" src="spacewar.png">
+                    <img id="explosion1" class="explosion" src="explosion.png">
+                    <img id="1up" class="up" src="1up.png">
+                    <img id="bonus" class="bonus" src="bonus.png">
+                    <img id="LaserBonus" class="LaserBonus" src="LaserBonus.png">
+                    <img id="textBonusLaser" class="textBonusLaser" src="textBonusLaser.png">
+                    <img id="aide" class="aide" src="aide.png"> 
+
+                </div>
+                
+                <div id="info">
+                    <span id="debut"> Dans la precipitation de son evasion, le capitaine Gloomy arrive au milieu d'un champ d'asteroide <br> <span id="urgent">Arriverez-vous a le secourir?</span></span>
+                </div>
+                
+                <div class="Musique">
+                    <img id="musicon" src="musicon.png" width="90">
+                </div>
+                
+                <div class="commencer">
+                    <img id="insertcoin" src="insertcoin.png" width="45">
+                </div>
+      
+                <div id="cache">
+                    <img id="vie" class="vie" src="vie3.png" width="90">
+                    <span id="score">Score<br><span id="val_score"> 2</span><img id="trophe2" src="trophe.png"></span>
+                    <span id="Hscore" > <span id="recordb">Record</span> <br><span id="hiscorePseudo"> Ordi </span> <span id="val_hscore"> 10</span><img id="trophe1" src="trophe.png"></span>
+                    <span id ="fin_partie">Vous avez perdu, votre score est de <span id="val_score"> 2</span> </span>
+                    <span id ="fin_partieB">Nouveau record : <span id="val_score"> 2 </span></span>  
+                </div>
+            </div>
+        </div>
+    
+        <audio preload="auto" id="musiqueFond" class="audioarcade" loop="loop"><source src="musiqueFond.mp3" type="audio/mp3"></audio>
+        <audio preload="auto" id="son" class="audioarcade"><source src="explosion.mp3" type="audio/mp3"><source src="beep.ogg" type="audio/ogg"></audio>
+        <audio preload="auto" id="gameover" class="audioarcade"><source src="gameover.mp3" type="audio/mp3"></audio>
+        <audio preload="auto" id="up" class="audioarcade"><source src="up.mp3" type="audio/mp3"></audio> 
+        <audio preload="auto" id="victoire" class="audioarcade"><source src="victoire.mp3" type="audio/mp3"></audio> 
+        <audio preload="auto" id="record" class="audioarcade"><source src="record.mp3" type="audio/mp3"></audio> 
+        <audio preload="auto" id="bruit" class="audioarcade"><source src="score.mp3" type="audio/mp3"></audio>
+        <audio preload="auto" id="wait" class="audioarcade" loop="loop"><source src="wait.mp3" type="audio/mp3"></audio> 
+        <audio preload="auto" id="audioinsert" class="audioarcade" ><source src="insertcoin.mp3" type="audio/mp3"></audio> 
+        <audio preload="auto" id="newhiscore" class="audioarcade" ><source src="newhiscore.mp3" type="audio/mp3"></audio>       
+        <audio preload="auto" id="sonLaser" class="audioarcade" ><source src="sonLaser.mp3" type="audio/mp3"></audio>      
+        <audio preload="auto" id="LaserBonusAudio" class="audioarcade" ><source src="LaserBonusAudio.mp3" type="audio/mp3"></audio>      
+        <!--  PARTIE CHAT-->
+        <div id="chat">
+        
+            <div id="top_chat">     
+                <div id="nombre"></div>
+                <div id="listePseudo"> </div>
+            </div>
+        
+            <section id="zone_chat"></section>
+            
+            <div id="bottom_chat">
+                <div id="pseudo">mon pseudo </div>
+                <form action="/" method="post" id="formulaire_chat">
+                    <input type="text" name="message" id="message" placeholder="Votre message..." size="50" autofocus="" autocomplete="off" />
+                    <input type="submit" id="envoi_message" value="Envoyer" />
+                </form>
+            </div>
+        </div>
+        
+        <span id="sonchat">
+            <img id="sonchaton" src="sonon.png" width="50">
+        </span>
+        
+        <audio preload="auto" id="nouveau"><source src="ding.mp3" type="audio/mp3"></audio>
+        <audio preload="auto" id="sonmessage"><source src="message.mp3" type="audio/mp3"></audio>
+        <audio preload="auto" id="aurevoir"><source src="aurevoir.mp3" type="audio/mp3"></audio>
+        
+        <!-- Infos supplémentaires -->
+        <div id="contact"> Créé par Buthor <br> Si vous avez des questions, remarques ou critiques constructives n'hésitez pas à <a href="https://www.facebook.com/nicolas.lang.56" target="_blank"> me contacter</a> ;D 
+        <br>
+        <span id="stats"><span id="partieJouees">Parties jouées: 0</span><span id="NbrConnexion">Nombre de connexion : 0 </span></span>
+        <span> Dernière Maj : 19/05/2018 </span>
+        </div>
+        
+        
+        
+        <!--  Les scripts utilisés-->
+         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js">//permet de gérer le côté client</script>
+        <script src="script.js"></script>
+    </body>
+</html>
+            
+            
+            
+            
+            
+            
+            

@@ -1,108 +1,94 @@
-//  OpenShift sample Node application
 var express = require('express'),
-    app     = express(),
-    morgan  = require('morgan');
-    
-Object.assign=require('object-assign')
+    app=express(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server),
+    ent = require('ent'), // Permet de bloquer les caractères HTML 
+    fs = require('fs');
 
-app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+app.use(express.static(__dirname + '/public'));
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
-    mongoURLLabel = "";
+//Initialisation des varables serveurs
+var liste =new Array();//Liste des pseudos
+var nbr = new Number();//Nombre de connectés
+var hiscore =new Number();//Hiscore global
+var memoire= new Array();//Liste des 50 derniers messages
+var liste_couleur=['aqua','chartreuse','red','silver','LightSkyBlue','yellow','cornsilk','DeepPink','DarkOrange','lavender'];//Liste des couleurs possibles (10 pour l'instant)
+var pseudoHiscore='ordi';//Pseudo du détenteur du hiscore
+var couleurHiscore='gray';//Couleur du détenteur du hiscore (par défaut ordi)
+var compteurPartie=0;
+var compteurConnexions=0;
+hiscore=10;//Premier hiscore au lancement du serveur
 
-if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
-  var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase(),
-      mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
-      mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
-      mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
-      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
-      mongoUser = process.env[mongoServiceName + '_USER'];
-
-  if (mongoHost && mongoPort && mongoDatabase) {
-    mongoURLLabel = mongoURL = 'mongodb://';
-    if (mongoUser && mongoPassword) {
-      mongoURL += mongoUser + ':' + mongoPassword + '@';
-    }
-    // Provide UI label that excludes user id and pw
-    mongoURLLabel += mongoHost + ':' + mongoPort + '/' + mongoDatabase;
-    mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
-
-  }
-}
-var db = null,
-    dbDetails = new Object();
-
-var initDb = function(callback) {
-  if (mongoURL == null) return;
-
-  var mongodb = require('mongodb');
-  if (mongodb == null) return;
-
-  mongodb.connect(mongoURL, function(err, conn) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    db = conn;
-    dbDetails.databaseName = db.databaseName;
-    dbDetails.url = mongoURLLabel;
-    dbDetails.type = 'MongoDB';
-
-    console.log('Connected to MongoDB at: %s', mongoURL);
-  });
-};
-
+// Chargement de la page 
 app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    var col = db.collection('counts');
-    // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-      if (err) {
-        console.log('Error running count. Message:\n'+err);
-      }
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
+  res.sendFile(__dirname + '/public/spaceWar.html'); 
+});
+
+// Quand un client se connecte...
+io.sockets.on('connection', function (socket, pseudo) {
+    socket.on('petit_nouveau', function(pseudo) {
+        pseudo = ent.encode(pseudo);//protège le code, évite de recevoir du JS
+        
+        socket.pseudo = pseudo;
+        socket.couleur= liste_couleur[compteurConnexions%10];//Choix de la couleur
+        liste.push({pseudo :pseudo, couleur:socket.couleur});
+        ++nbr;//Mise à jour du compteur
+        ++compteurConnexions;
+        socket.broadcast.emit('nouveau_client', {pseudo :socket.pseudo, couleur : socket.couleur});//On envoie l'info de connexion à tout le monde
+        socket.emit('MAJ_liste', liste);
+        socket.emit('couleur',socket.couleur );//Envoie de sa couleur au nouveau
+        socket.broadcast.emit('MAJ_liste', liste);//Nouvelle liste de pseudo
+        socket.emit('MAJ_nbr',nbr);
+        socket.broadcast.emit('MAJ_nbr',nbr);
+        socket.emit('Memoire_chat',memoire);//Envoie des anciens messages au nouveau
+        socket.emit('partage_hiscore',{hiscore :hiscore, pseudo : pseudoHiscore, couleur : couleurHiscore});//Envoie du hiscore au nouveau
+        socket.broadcast.emit('MAJ_CompteurConnexion',compteurConnexions);
+        socket.emit('MAJ_CompteurConnexion',compteurConnexions);
+        socket.emit('MAJ_Parties',compteurPartie);
     });
-  } else {
-    res.render('index.html', { pageCountMessage : null});
-  }
-});
-
-app.get('/pagecount', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
+    
+    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et sa couleur et on les transmet aux autres personnes, on met aussi à jour la mémoire
+    socket.on('message', function (message) {
+        memoire.push({pseudo:socket.pseudo, message:message, couleur :socket.couleur});
+        if (memoire.length>50){
+            memoire.shift();
+        }
+        message = ent.encode(message);
+        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message, couleur : socket.couleur});
     });
-  } else {
-    res.send('{ pageCount: -1 }');
-  }
-});
+    
+    //Déconnexion d'un membre
+    socket.on('disconnect', function(){
+        if(nbr>0){
+            --nbr;
+        };
+        indice = liste.indexOf(socket.pseudo);
+        liste.splice(indice,1); //à partir de cet indice on supprime 1 element
+        socket.broadcast.emit('MAJ_liste', liste); //tout le monde met à jour
+        socket.broadcast.emit('MAJ_nbr',nbr);
+        socket.broadcast.emit('disconnected', {pseudo :socket.pseudo, couleur : socket.couleur});
+    });
+    
+    //Nouveau hiscore reçu
+    socket.on('new_hiscore', function(val){
+        hiscore=val;
+        pseudoHiscore=socket.pseudo;
+        couleurHiscore=socket.couleur
+        socket.broadcast.emit('partage_hiscore',{hiscore :hiscore, pseudo : pseudoHiscore, couleur : couleurHiscore});
+    });
+    
+    //Nouveau score reçu
+    socket.on('new_score', function(val){
+        socket.broadcast.emit('partage_score',{score :val, pseudo : pseudo=socket.pseudo, couleur : socket.couleur});
+        socket.emit('partage_score',{score :val, pseudo : pseudo=socket.pseudo, couleur : socket.couleur});
+    });
+    
+    socket.on('AjoutPartieJouee',function(val){
+        ++compteurPartie;
+        socket.emit('MAJ_Parties',compteurPartie);
+        socket.broadcast.emit('MAJ_Parties',compteurPartie);
+    });
+ }); 
 
-// error handling
-app.use(function(err, req, res, next){
-  console.error(err.stack);
-  res.status(500).send('Something bad happened!');
-});
 
-initDb(function(err){
-  console.log('Error connecting to Mongo. Message:\n'+err);
-});
 
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
-
-module.exports = app ;

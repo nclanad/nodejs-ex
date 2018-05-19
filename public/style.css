@@ -1,0 +1,319 @@
+body{
+        background-image: url("salle.jpg");
+            
+      }
+
+/*Style pour le Jeu */
+       
+@font-face {
+    font-family: '8bit';
+    src: url('8bit.ttf') format('truetype');
+}
+     
+#arcade{
+    z-index: 200; 
+    position: absolute; 
+    top : 20px;
+    left : 50px
+      }
+
+#jeu{
+    z-index : 10;
+    display : flex;
+    width : 800px;
+    height: 900px;
+    border: 10px grey solid;
+    border-radius: 10px;
+    box-shadow: 6px 6px 6px silver;
+    position : absolute;
+    left : 80px;
+    top : -10px;
+      }
+
+#anim
+    {
+    z-index : 20;
+    width : 800px;
+    height: 800px;
+    background-color: black;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
+    top : 100px;    
+    }
+
+#joueur{
+    z-index: 200; 
+    position: absolute; 
+    top: 20px; 
+    left: 70px;
+    opacity : 0;
+    }
+
+#info{
+    border-bottom : 5px silver solid ;
+    width : 655px;
+    height: 95px;
+    z-index: 200; 
+    position: absolute;
+    background-color: black;
+      font-family: '8bit', fantasy;
+      font-size : 30px;
+      color :deepskyblue;
+    display :flex;
+      justify-content : space-around;
+    align-items: center;
+    }
+
+#textBonusLaser{
+    z-index: 300; 
+    position: absolute; 
+    left: 1000px; 
+    top: 0px;
+    }
+
+.obstacle{
+    z-index: 80; 
+    position: absolute; 
+    left: 800px; 
+    top: 0px;
+    }
+    
+#spacewar{
+    z-index: 80; 
+    position: absolute; 
+    left: 130px; 
+    top: 300px;
+}
+
+#aide{
+    z-index = 80;
+    position : absolute;
+    left: 350px; 
+    top: 20px;
+    display : inline;
+}
+
+.bonus{
+    z-index: 80; 
+    position: absolute; 
+    left: 800px; 
+    top: -1000px;
+    }
+
+.LaserBonus{
+    z-index: 80; 
+    position: absolute; 
+    left: -500px; 
+    top: -500px;
+    }
+
+.explosion {
+    z-index: 300; 
+    position: absolute; 
+    left: 1000px; 
+    top: 0px;
+    }
+
+.up {
+    z-index: 300; 
+    position: absolute; 
+    left: 1000px; 
+    top: 0px;
+    }
+
+.fond{
+    z-index: 1;
+    flex: 1;
+    position: relative;
+    opacity :0;
+      }
+
+#cache{
+  display:none;
+}
+
+#Hscore{
+  font-size: 20px;
+}
+#recordb{
+    color : gray;
+}
+#score{
+    color : gray;
+    font-size: 20px;
+}
+#val_hscore
+{
+    color : red;
+}
+#val_score {
+    color : deepskyblue;
+}
+#fin_partie{
+  color :red;
+  font-size : 18px;
+}
+
+#fin_partieB{
+  display : flex;
+  justify-content : space-around;
+  align-items: center;
+  color : green;
+  font-size : 30px;
+}
+#trophe2{
+  display : none;
+}
+
+#trophe1{
+}
+
+.Musique{
+  position: absolute; 
+  left: 655px; 
+  width:100px;
+  height :95px;
+  z-index :200;
+  border-bottom: 5px silver solid;
+  background-color: black;
+
+}
+
+#musicon{
+  display : none;
+}
+
+#trophe2{
+  z-index:200;
+    
+}
+      
+.commencer{
+  position: absolute; 
+  left: 755px;
+  top:0px;
+  width:45px;
+  height :95px;
+  z-index :200;
+  border-bottom: 5px silver solid;
+  background-color: black;
+
+}
+
+#insertcoin{
+  position: absolute;
+}
+      
+#debut{
+  font-size : 17px;  
+  text-align: center;
+  font-style: italic;
+}
+
+#urgent{
+  color : red;      
+}
+
+
+/*Style pour le Chat*/
+
+#zone_chat {
+    position : absolute;
+    top : 68px;
+    width : 600px;
+    height:680px;
+    overflow-y: scroll;
+    border-bottom:2px grey solid;
+    margin : 0px 0px 0px 2px;
+    word-wrap: break-word;
+
+}
+
+#chat{
+    position : absolute;
+    top : 20px;
+    left : 1060px;
+    width : 600px;
+    height : 800px;
+    border : 10px grey solid;
+    border-radius : 10px;
+    box-shadow: 6px 6px 6px silver;
+    overflow : hidden;
+    background-image: url("fondchat.JPG");
+    color:aliceblue;
+    font-family : inherit;
+    font-size : 20px;
+    padding: 2px;
+}
+
+#top_chat{
+    background-color: black;
+    height: 60px;
+    width : 605px;
+    position :absolute;
+    left : -1px;
+    border-bottom : 5px grey solid;
+    overflow :hidden;
+}
+
+#listePseudo{
+    height: 30px;
+    overflow : auto;
+    border-top:2px grey solid;
+    margin : 0px 0px 0px 2px;
+
+}
+            
+            
+#nombre{
+    height: 30px;
+    margin : 0px 0px 0px 2px;
+}
+
+#bottom_chat{
+    position: absolute;
+    top : 750px;
+    left : 20px;
+    height: 30px;
+
+}
+            
+#sonchat{
+    position: absolute;
+    top : 782px;
+    left : 1620px;
+    z-index :1000;
+}
+
+#contact{
+    position : absolute;
+    top : 860px;
+    left : 1060px;
+    width : 600px;
+    height : 51px;
+    border : 5px grey solid;
+    border-radius : 10px;
+    box-shadow: 6px 6px 6px silver;
+    overflow : hidden;
+    background-image: url("fondchat.JPG");
+    color:aliceblue;
+    font-family : inherit;
+    font-size : 15px;
+    padding: 2px; 
+    overflow : auto;
+}
+
+a{
+    color : white;
+}
+
+a:hover{
+    opacity : 0.6;
+}
+
+#stats{
+    display : flex;
+    justify-content: space-around;
+}
