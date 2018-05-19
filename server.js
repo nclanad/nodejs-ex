@@ -59,7 +59,7 @@ io.sockets.on('connection', function (socket, pseudo) {
     
     //Déconnexion d'un membre
     socket.on('disconnect', function(){
-        if(nbr>1){
+        if(nbr>0 && socket.pseudo){
             --nbr;
         };
         indice = liste.indexOf(socket.pseudo);
