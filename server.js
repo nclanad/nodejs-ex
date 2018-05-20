@@ -64,7 +64,7 @@ io.sockets.on('connection', function (socket, pseudo) {
         if(nbr>0 && socket.pseudo!=undefined){
             --nbr;
         }
-        var indice = liste.indexOf({socket.pseudo, socket.couleur});
+        var indice = liste.indexOf({pseudo :socket.pseudo, couleur : socket.couleur});
         liste.splice(indice ,1); //à partir de cet indice on supprime 1 element
         socket.broadcast.emit('MAJ_liste', liste); //tout le monde met à jour
         socket.broadcast.emit('MAJ_nbr',nbr);
